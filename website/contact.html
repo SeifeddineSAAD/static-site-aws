@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>seifcloud — Contact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --accent: #00ffe0; --accent2: #ff3cac;
+      --text: #e8e8f0; --mono: 'Space Mono', monospace; --display: 'Syne', sans-serif;
+    }
+    body { background:var(--bg); color:var(--text); font-family:var(--mono); min-height:100vh; overflow-x:hidden; }
+    body::before {
+      content:''; position:fixed; inset:0;
+      background-image: linear-gradient(rgba(0,255,224,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(0,255,224,0.04) 1px,transparent 1px);
+      background-size:40px 40px; animation:gridShift 20s linear infinite; z-index:0;
+    }
+    @keyframes gridShift { 0%{transform:translateY(0);} 100%{transform:translateY(40px);} }
+    .glow-orb { position:fixed; width:500px; height:500px; border-radius:50%; filter:blur(120px); opacity:0.12; z-index:0; animation:drift 12s ease-in-out infinite alternate; }
+    .glow-orb.a { background:var(--accent); top:-100px; left:-100px; }
+    .glow-orb.b { background:var(--accent2); bottom:-100px; right:-100px; animation-delay:-6s; }
+    @keyframes drift { from{transform:translate(0,0) scale(1);} to{transform:translate(60px,40px) scale(1.1);} }
+
+    nav { position:fixed; top:0; left:0; right:0; z-index:10; display:flex; align-items:center; justify-content:space-between; padding:1.4rem 3rem; background:rgba(10,10,15,0.6); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid rgba(0,255,224,0.07); opacity:0; animation:fadeDown 0.7s ease forwards 0.1s; }
+    .nav-logo { font-family:var(--display); font-size:1.1rem; font-weight:800; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-decoration:none; }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(232,232,240,0.5); text-decoration:none; position:relative; transition:color 0.25s ease; }
+    .nav-links a.active { color:var(--accent); }
+    .nav-links a::after { content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.3s ease; }
+    .nav-links a:hover { color:var(--accent); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-16px);} to{opacity:1;transform:translateY(0);} }
+
+    .page { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:140px 2rem 4rem; opacity:0; animation:fadeUp 0.7s ease forwards 0.4s; }
+    .page-tag { font-size:0.72rem; letter-spacing:0.3em; color:var(--accent); text-transform:uppercase; margin-bottom:1.2rem; }
+    h1 { font-family:var(--display); font-size:clamp(2.2rem,6vw,4rem); font-weight:800; letter-spacing:-0.02em; background:linear-gradient(135deg,var(--text) 40%,var(--accent) 80%,var(--accent2) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:2rem; }
+    .divider { width:50px; height:2px; margin-bottom:2rem; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+
+    .intro { font-size:0.85rem; line-height:1.9; color:rgba(232,232,240,0.55); margin-bottom:2.5rem; }
+
+    .contact-links { display:flex; flex-direction:column; gap:0.85rem; margin-bottom:3rem; }
+    .contact-link {
+      display:flex; align-items:center; justify-content:space-between;
+      border:1px solid rgba(0,255,224,0.1); border-radius:4px;
+      padding:1rem 1.3rem; text-decoration:none;
+      color:rgba(232,232,240,0.65); font-size:0.8rem;
+      transition: border-color 0.25s, color 0.25s, background 0.25s;
+    }
+    .contact-link:hover { border-color:var(--accent); color:var(--text); background:rgba(0,255,224,0.04); }
+    .contact-link .label { display:flex; align-items:center; gap:0.8rem; }
+    .contact-icon { font-size:1rem; }
+    .contact-arrow { color:var(--accent); opacity:0; transition:opacity 0.25s, transform 0.25s; }
+    .contact-link:hover .contact-arrow { opacity:1; transform:translateX(4px); }
+
+    /* Simple form */
+    .form-title { font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent2); margin-bottom:1.2rem; }
+    .field { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
+    label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(232,232,240,0.4); }
+    input, textarea {
+      background:rgba(255,255,255,0.03); border:1px solid rgba(0,255,224,0.12);
+      border-radius:4px; padding:0.75rem 1rem;
+      font-family:var(--mono); font-size:0.8rem; color:var(--text);
+      outline:none; transition:border-color 0.25s;
+      resize:vertical;
+    }
+    input:focus, textarea:focus { border-color:var(--accent); }
+    textarea { min-height:120px; }
+    .btn {
+      margin-top:0.5rem; padding:0.85rem 2rem;
+      background:transparent; border:1px solid var(--accent);
+      border-radius:4px; font-family:var(--mono); font-size:0.72rem;
+      letter-spacing:0.2em; text-transform:uppercase; color:var(--accent);
+      cursor:pointer; transition: background 0.25s, color 0.25s;
+    }
+    .btn:hover { background:var(--accent); color:var(--bg); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    @media(max-width:600px){ nav{padding:1rem 1.5rem;} .nav-links{gap:1.4rem;} .nav-links a{font-size:0.65rem;} }
+  </style>
+</head>
+<body>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <nav>
+    <a class="nav-logo" href="index.html">seifcloud</a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <p class="page-tag">Get in touch</p>
+    <h1>Contact</h1>
+    <div class="divider"></div>
+    <p class="intro">Have a project in mind or just want to talk cloud? Reach out via any of the channels below or drop a message directly.</p>
+
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:seif@seifcloud.com">
+        <span class="label"><span class="contact-icon">✉</span> seif@seifcloud.com</span>
+        <span class="contact-arrow">→</span>
+      </a>
+      <a class="contact-link" href="https://github.com/" target="_blank">
+        <span class="label"><span class="contact-icon">⌥</span> GitHub</span>
+        <span class="contact-arrow">→</span>
+      </a>
+      <a class="contact-link" href="https://linkedin.com/" target="_blank">
+        <span class="label"><span class="contact-icon">⬡</span> LinkedIn</span>
+        <span class="contact-arrow">→</span>
+      </a>
+    </div>
+
+    <p class="form-title">Or send a message</p>
+    <div class="field">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Your name" />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="your@email.com" />
+    </div>
+    <div class="field">
+      <label for="msg">Message</label>
+      <textarea id="msg" placeholder="What's on your mind?"></textarea>
+    </div>
+    <button class="btn">Send message</button>
+  </div>
+</body>
+</html>

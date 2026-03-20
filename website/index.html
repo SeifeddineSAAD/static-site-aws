@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>seifcloud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --accent: #00ffe0;
+      --accent2: #ff3cac;
+      --text: #e8e8f0;
+      --mono: 'Space Mono', monospace;
+      --display: 'Syne', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,224,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,224,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridShift 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridShift {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(40px); }
+    }
+
+    .glow-orb {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
+      z-index: 0;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .glow-orb.a { background: var(--accent);  top: -100px; left: -100px; }
+    .glow-orb.b { background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -6s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(60px, 40px) scale(1.1); }
+    }
+
+    /* ── Navbar ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      opacity: 0;
+      animation: fadeDown 0.7s ease forwards 0.1s;
+      background: rgba(10,10,15,0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0,255,224,0.07);
+    }
+
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(232,232,240,0.5);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Hero ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin: 0.3em 0 0.2em;
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent) 70%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: rgba(232,232,240,0.45);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      margin: 2rem auto;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: rgba(232,232,240,0.5);
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.15s;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,224,0.5); }
+      50%       { box-shadow: 0 0 0 6px rgba(0,255,224,0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.4rem; }
+      .nav-links a { font-size: 0.65rem; letter-spacing: 0.12em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb a"></div>
+  <div class="glow-orb b"></div>
+
+  <nav>
+    <a class="nav-logo" href="#">seifcloud</a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <p class="tag">seifcloud.com</p>
+    <h1>Build smarter. Secure better. Scale faster.</h1>
+    <p class="subtitle">Hosted on Amazon S3 &nbsp;·&nbsp; Deployed with Terraform</p>
+    <div class="divider"></div>
+    <span class="status">
+      <span class="dot"></span>
+      Site is live
+    </span>
+  </div>
+</body>
+</html>
